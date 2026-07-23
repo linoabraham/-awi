@@ -103,17 +103,32 @@ public class SeguridadConfiguracion {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		List<String> origenes = Arrays.stream(propiedades.frontendOrigin().split(","))
-				.map(String::trim)
-				.filter(o -> !o.isEmpty())
-				.toList();
+
+		List<String> origenes = new java.util.ArrayList<>(
+				Arrays.stream(propiedades.frontendOrigin().split(","))
+						.map(String::trim)
+						.filter(o -> !o.isEmpty())
+						.toList()
+		);
+
+		// Frontend en Vercel
+		origenes.add("https://nawi-panel.vercel.app");
+
 		config.setAllowedOrigins(origenes);
-		config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-		config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Idempotency-Key"));
+		config.setAllowedMethods(List.of(
+				"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+		));
+		config.setAllowedHeaders(List.of(
+				"Authorization",
+				"Content-Type",
+				"Idempotency-Key"
+		));
 		config.setExposedHeaders(List.of("Content-Disposition"));
 		config.setAllowCredentials(true);
+
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
+
 		return source;
 	}
 }
