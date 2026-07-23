@@ -48,7 +48,7 @@ server:
 
 nawin:
   zona-horaria: ${ZONA_HORARIA:America/Lima}
-  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:4200,http://localhost:3000}
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:4200,http://localhost:3000,https://nawi-panel.vercel.app}
   almacenamiento-privado-ruta: ${ALMACENAMIENTO_PRIVADO_RUTA:./data/privado}
   cifrado-datos-key: ${CIFRADO_DATOS_KEY:dev-dev-dev-dev-dev-dev-dev-dev-32}
   empresa:
