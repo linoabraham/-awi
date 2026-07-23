@@ -46,10 +46,22 @@ public class SeguridadConfiguracion {
 		http
 				.csrf(AbstractHttpConfigurer::disable)
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.sessionManagement(session ->
+						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider())
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+						// Health Check de Koyeb
+						.requestMatchers("/actuator/**").permitAll()
+
+						// Swagger
+						.requestMatchers(
+								"/swagger-ui.html",
+								"/swagger-ui/**",
+								"/v3/api-docs/**"
+						).permitAll()
+
+						// Autenticación pública
 						.requestMatchers(HttpMethod.POST,
 								"/api/autenticacion/iniciar-sesion",
 								"/api/autenticacion/dispositivos-en-espera",
@@ -59,10 +71,14 @@ public class SeguridadConfiguracion {
 								"/api/autenticacion/verificar-correo",
 								"/api/autenticacion/reenviar-codigo",
 								"/api/autenticacion/recuperar-clave/solicitar",
-								"/api/autenticacion/recuperar-clave/confirmar").permitAll()
+								"/api/autenticacion/recuperar-clave/confirmar"
+						).permitAll()
+
 						.anyRequest().authenticated())
+
 				.addFilterBefore(limitadorTasaFiltro, UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(jwtFiltro, UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
 	}
 
