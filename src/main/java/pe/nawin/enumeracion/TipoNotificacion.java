@@ -1,0 +1,12 @@
+package pe.nawin.enumeracion;
+
+public enum TipoNotificacion {
+	BIENVENIDA,
+	POR_VENCER,
+	VENCIDA,
+	RENOVADA,
+	PAGO_CONFIRMADO,
+	CREDITOS_CARGADOS,
+	RECARGA_MIPLATA,
+	COMPRA_MIPLATA
+}

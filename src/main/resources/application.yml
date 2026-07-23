@@ -1,0 +1,124 @@
+spring:
+  application:
+    name: nawin-backend
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:20}
+      minimum-idle: ${DB_POOL_MIN:5}
+      connection-timeout: 10000
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: ${ZONA_HORARIA:America/Lima}
+        batch_size: 30
+        default_batch_fetch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:soynawi@gmail.com}
+    password: ${MAIL_PASSWORD:jtypvysojqnnompy}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+server:
+  port: ${SERVER_PORT:8080}
+
+nawin:
+  zona-horaria: ${ZONA_HORARIA:America/Lima}
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:4200,http://localhost:3000}
+  almacenamiento-privado-ruta: ${ALMACENAMIENTO_PRIVADO_RUTA:./data/privado}
+  cifrado-datos-key: ${CIFRADO_DATOS_KEY:dev-dev-dev-dev-dev-dev-dev-dev-32}
+  empresa:
+    nombre: ${NAWIN_EMPRESA_NOMBRE:NAWIN S.A.C.}
+    ruc: ${NAWIN_EMPRESA_RUC:20609999991}
+    direccion: ${NAWIN_EMPRESA_DIRECCION:Av. Principal 123 - Lima, Peru}
+    telefono: ${NAWIN_EMPRESA_TELEFONO:+51 999 999 999}
+  admin:
+    usuario: ${NAWIN_ADMIN_USUARIO:admin}
+    clave: ${NAWIN_ADMIN_CLAVE:Admin@2026}
+    correo: ${NAWIN_ADMIN_CORREO:admin@nawin.local}
+    celular: ${NAWIN_ADMIN_CELULAR:999999999}
+  jwt:
+    secret: ${JWT_SECRET:7kN9xP4mQ2vL8wY1zR0tU3sB6aC5dF9eG8hJ1kM4nP7=}
+    access-minutos: ${JWT_ACCESS_MINUTOS:15}
+    refresh-horas-web: ${JWT_REFRESH_HORAS_WEB:12}
+    refresh-dias-movil: ${JWT_REFRESH_DIAS_MOVIL:30}
+  codart:
+    base-url: ${CODART_BASE_URL:https://api-codart.cgrt.org}
+    api-token: ${CODART_API_TOKEN:KPOfKcsZQr1yizqgmSRXPpSfJ2yL2ntEKNManxb3LP3XFeMoVYNCGmrplx8G}
+  correo:
+    habilitado: ${CORREO_HABILITADO:true}
+    remitente: ${CORREO_REMITENTE:${MAIL_USERNAME:no-responder@nawin.pe}}
+    expiracion-minutos: ${CORREO_CODIGO_EXPIRACION_MINUTOS:15}
+    reenvio-segundos: ${CORREO_CODIGO_REENVIO_SEGUNDOS:60}
+    max-intentos: ${CORREO_CODIGO_MAX_INTENTOS:5}
+  seguridad:
+    max-intentos-login: ${SEG_MAX_INTENTOS_LOGIN:5}
+    bloqueo-minutos: ${SEG_BLOQUEO_MINUTOS:15}
+    rate-limit-solicitudes: ${SEG_RATE_LIMIT:10}
+    rate-limit-ventana-segundos: ${SEG_RATE_LIMIT_VENTANA:60}
+    horas-purga-no-verificados: ${SEG_HORAS_PURGA:48}
+    exigir-secretos-produccion: ${SEG_EXIGIR_SECRETOS:false}
+  push:
+    # FCM para el proyecto Firebase "nawi-f2801".
+    # PRODUCCIÓN: define PUSH_CREDENCIALES_JSON con el CONTENIDO del JSON de la
+    #   cuenta de servicio (secreto, sin archivos en disco ni rutas de máquina).
+    # DESARROLLO: por defecto lee el JSON desde el classpath (src/main/resources),
+    #   así funciona igual desde el IDE o el jar, sin rutas absolutas.
+    # También admite PUSH_CREDENCIALES con una ruta de archivo absoluta.
+    habilitado: ${PUSH_HABILITADO:true}
+    proyecto-id: ${PUSH_PROYECTO_ID:nawi-f2801}
+    credenciales-json: ${PUSH_CREDENCIALES_JSON:}
+    credenciales-ruta: ${PUSH_CREDENCIALES:classpath:firebase-service-account.json}
+  consultas:
+    # Anti-abuso de membresías ilimitadas: corte de seguridad por cliente/día y
+    # umbral para registrar aviso de uso anómalo (no bloquea). Retención y permiso
+    # de exportar para las consultas solo-créditos (cliente free).
+    tope-diario-ilimitado: ${CONSULTAS_TOPE_DIARIO_ILIMITADO:2000}
+    alerta-consumo-diario: ${CONSULTAS_ALERTA_CONSUMO_DIARIO:500}
+    dias-retencion-creditos: ${CONSULTAS_DIAS_RETENCION_CREDITOS:30}
+    permite-exportar-creditos: ${CONSULTAS_PERMITE_EXPORTAR_CREDITOS:true}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
